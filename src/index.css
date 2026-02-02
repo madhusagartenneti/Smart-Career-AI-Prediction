@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+/* ===== Animated Lines Background ===== */
+.lines-bg {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.lines {
+  position: absolute;
+  inset: 0;
+  width: 90vw;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.line {
+  width: 1px;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.line::after {
+  content: "";
+  position: absolute;
+  height: 15vh;
+  width: 100%;
+  top: -50%;
+  background: linear-gradient(to bottom, transparent, #ffffff);
+  animation: drop 7s infinite;
+}
+
+/* 🎨 Colors + delays */
+.line:nth-child(1)::after { background: linear-gradient(to bottom, transparent, #FF4500); animation-delay: .5s; }
+.line:nth-child(2)::after { background: linear-gradient(to bottom, transparent, #32CD32); animation-delay: 1s; }
+.line:nth-child(3)::after { background: linear-gradient(to bottom, transparent, #1E90FF); animation-delay: 1.5s; }
+.line:nth-child(4)::after { background: linear-gradient(to bottom, transparent, #FFD700); animation-delay: 2s; }
+.line:nth-child(5)::after { background: linear-gradient(to bottom, transparent, #8A2BE2); animation-delay: 2.5s; }
+.line:nth-child(6)::after { background: linear-gradient(to bottom, transparent, #20B2AA); animation-delay: 3s; }
+.line:nth-child(7)::after { background: linear-gradient(to bottom, transparent, #DC143C); animation-delay: 3.5s; }
+.line:nth-child(8)::after { background: linear-gradient(to bottom, transparent, #00FA9A); animation-delay: 4s; }
+.line:nth-child(9)::after { background: linear-gradient(to bottom, transparent, #FF1493); animation-delay: 4.5s; }
+.line:nth-child(10)::after { background: linear-gradient(to bottom, transparent, #00BFFF); animation-delay: 5s; }
+
+@keyframes drop {
+  0% { top: -50%; }
+  100% { top: 110%; }
+}
+/* ===== End ===== */
