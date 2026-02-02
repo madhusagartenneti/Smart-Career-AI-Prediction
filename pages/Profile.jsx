@@ -8,10 +8,13 @@ export default function Profile() {
     email: "",
     number: "",
   });
+
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [success, setSuccess] = useState("");
 
+  // ================= FETCH PROFILE =================
   useEffect(() => {
     async function fetchProfile() {
       try {
@@ -31,19 +34,36 @@ export default function Profile() {
     fetchProfile();
   }, []);
 
+  // ================= HANDLE INPUT =================
   function handleChange(e) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   }
 
+  // ================= UPDATE PROFILE =================
   async function handleUpdate() {
     try {
       setSaving(true);
-      const updated = await updateProfile(
-        localStorage.getItem("token"),
-        formData
+      setSuccess("");
+
+      const res = await updateProfile(
+        formData,
+        localStorage.getItem("token")
       );
-      setProfile(updated);
-      setEditing(false);
+
+      if (res.message === "Profile updated successfully") {
+        // ✅ Update UI instantly
+        setProfile((prev) => ({
+          ...prev,
+          ...formData,
+        }));
+
+        setEditing(false);
+        setSuccess("✅ Profile updated successfully");
+
+        setTimeout(() => setSuccess(""), 3000);
+      } else {
+        alert("Update failed");
+      }
     } catch (err) {
       console.error(err);
       alert("Failed to update profile");
@@ -73,19 +93,25 @@ export default function Profile() {
       </div>
     );
 
-  // ================= PROFILE =================
+  // ================= UI =================
   return (
     <div className="min-h-screen flex justify-center items-center px-4 bg-white">
       <div className="relative w-full max-w-md p-8 rounded-3xl bg-gray-100 border shadow-lg">
-        
-        {/* Edit Icon */}
+
+        {/* ✅ Success Message */}
+        {success && (
+          <div className="mb-4 bg-green-100 border border-green-300 text-green-700 px-4 py-2 rounded-xl text-sm text-center">
+            {success}
+          </div>
+        )}
+
+        {/* ✏️ Edit Icon */}
         {!editing && (
           <button
             onClick={() => setEditing(true)}
             className="absolute top-4 right-4 p-2 rounded-full
                        bg-indigo-600 text-white
                        hover:bg-indigo-700 transition shadow"
-            title="Edit Profile"
           >
             ✏️
           </button>
@@ -104,8 +130,12 @@ export default function Profile() {
             <h2 className="text-3xl font-extrabold text-center text-indigo-800 mb-2">
               {profile.username}
             </h2>
-            <p className="text-gray-700 text-center">{profile.email}</p>
-            <p className="text-gray-600 text-center">{profile.number}</p>
+            <p className="text-gray-700 text-center break-words">
+              {profile.email}
+            </p>
+            <p className="text-gray-600 text-center">
+              {profile.number}
+            </p>
 
             <div className="my-6 h-px bg-gray-300"></div>
 
@@ -151,7 +181,7 @@ export default function Profile() {
                 onClick={handleUpdate}
                 disabled={saving}
                 className="flex-1 py-2 rounded-xl bg-green-600 text-white
-                           font-semibold hover:bg-green-700 transition"
+                           font-semibold hover:bg-green-700 transition disabled:opacity-60"
               >
                 {saving ? "Saving..." : "Save"}
               </button>

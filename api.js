@@ -44,6 +44,7 @@ export async function updateProfile(data, token) {
 }
 
 
+
 // CAREER PREDICTION
 export async function predictCareer(data, token) {
   const res = await fetch(`${API}/predict/`, {
